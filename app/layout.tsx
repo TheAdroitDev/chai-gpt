@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { QueryProvider } from "@/components/providers/query-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { ClerkProvider } from '@clerk/nextjs'
 
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
@@ -31,6 +32,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       
       <body className="min-h-full flex flex-col">
+        <ClerkProvider>
         <QueryProvider>
         <ThemeProvider
           attribute="class"
@@ -41,6 +43,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {children}
         </ThemeProvider>
         </QueryProvider>
+        </ClerkProvider>
       </body>
 
       
