@@ -37,13 +37,16 @@ function ComposerWithScroll({
     status: ChatStatus;
 }) {
     const { scrollToBottom } = useStickToBottomContext();
+    const [isInputFocused, setIsInputFocused] = React.useState(true);
 
     const personaState: PersonaState =
         status === "submitted"
             ? "thinking"
             : status === "streaming"
             ? "speaking"
-            : "idle";
+            : isInputFocused
+            ? "idle"
+            : "asleep";
 
     return (
         <div className="sticky bottom-0 z-20 w-full shrink-0 bg-gradient-to-t from-background via-background/90 to-transparent pt-3 pb-2">
@@ -57,6 +60,7 @@ function ComposerWithScroll({
                 }}
                 isSending={isSending}
                 autoFocus
+                onFocusChange={setIsInputFocused}
             />
         </div>
     );

@@ -18,6 +18,7 @@ type ChatComposerProps = {
   placeholder?: string;
   className?: string;
   autoFocus?: boolean;
+  onFocusChange?: (isFocused: boolean) => void;
 };
 
 /**
@@ -29,6 +30,7 @@ export function ChatComposer({
   placeholder = "Message ChaiGPT…",
   className,
   autoFocus = false,
+  onFocusChange,
 }: ChatComposerProps) {
   const [value, setValue] = React.useState("");
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
@@ -71,6 +73,8 @@ export function ChatComposer({
           value={value}
           onChange={(event) => setValue(event.target.value)}
           onKeyDown={handleKeyDown}
+          onFocus={() => onFocusChange?.(true)}
+          onBlur={() => onFocusChange?.(false)}
           placeholder={placeholder}
           disabled={isSending}
           rows={1}
@@ -90,7 +94,7 @@ export function ChatComposer({
         </InputGroupAddon>
       </InputGroup>
       <p className="mt-2 text-center text-xs text-muted-foreground">
-        ChaiGPT can make mistakes. Check important info.
+        ChaiGPT is an AI it can make mistakes.
       </p>
     </form>
   );

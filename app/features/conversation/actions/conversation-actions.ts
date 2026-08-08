@@ -74,6 +74,23 @@ export async function listConversations(): Promise<ConversationListItem[]> {
 export async function createConversation(title = "New Chat") {
     const user = await requireUser();
 
+    const existingEmpty = await prisma.conversation.findFirst({
+        where: {
+            userId: user.id,
+            isArchived: false,
+            messages: {
+                none: {},
+            },
+        },
+        orderBy: {
+            createdAt: "desc",
+        },
+    });
+
+    if (existingEmpty) {
+        return existingEmpty;
+    }
+
     return prisma.conversation.create({
         data: {
             userId: user.id,
