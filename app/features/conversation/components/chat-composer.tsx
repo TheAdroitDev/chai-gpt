@@ -65,7 +65,7 @@ export function ChatComposer({
       onSubmit={(event) => void handleSubmit(event)}
       className={cn("mx-auto w-full max-w-3xl px-4 pb-4 md:px-6", className)}
     >
-      <InputGroup className="h-auto min-h-14 rounded-3xl border-border/80 bg-background shadow-sm dark:bg-input/40">
+      <InputGroup className="h-auto min-h-14 rounded-3xl border border-border bg-background shadow-md dark:bg-card dark:border-border">
         <InputGroupTextarea
           ref={textareaRef}
           value={value}

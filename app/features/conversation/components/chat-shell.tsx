@@ -9,9 +9,9 @@ import { AppSidebar } from "./app-sidebar";
  */
 export function ChatShell({ children }: { children: React.ReactNode }) {
   return (
-    <SidebarProvider>
+    <SidebarProvider className="h-full max-h-svh overflow-hidden">
       <AppSidebar />
-      <SidebarInset className="min-h-svh overflow-hidden">
+      <SidebarInset className="h-full max-h-svh flex flex-col overflow-hidden">
         {children}
       </SidebarInset>
     </SidebarProvider>

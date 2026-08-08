@@ -3,11 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
+  Monitor,
+  Moon,
   MoreHorizontalIcon,
   PencilIcon,
   PinIcon,
   PinOffIcon,
   PlusIcon,
+  Sun,
   Trash2Icon,
 } from "lucide-react";
 import { UserButton } from "@clerk/nextjs";
@@ -15,7 +18,6 @@ import { useTheme } from "next-themes";
 
 // -----------------------------------------------------------------
 
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -52,10 +54,6 @@ export function AppSidebar() {
   const pathname = usePathname();
   const { data: conversations, isLoading } = useConversations();
 
-  
-// Get the active conversation id from the pathname (e.g. /c/123)
-// pathname.split("/")[2] is the third part of the pathname (the conversation id)
-//  firstparam = / , secondparam = c , thirdparam = 123
   const activeId = pathname.startsWith("/c/")
     ? pathname.split("/")[2]
     : undefined;
@@ -70,16 +68,20 @@ export function AppSidebar() {
               className="font-semibold tracking-tight"
               render={<Link href="/" />}
             >
-              <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-sm text-primary-foreground">
+              <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary text-sm font-bold text-primary-foreground">
                 C
               </span>
-              <span>ChaiGPT</span>
+              <span className="truncate min-w-0 font-semibold group-data-[collapsible=icon]:hidden">
+                ChaiGPT
+              </span>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton tooltip="New chat" render={<Link href="/" />}>
-              <PlusIcon />
-              <span>New chat</span>
+              <PlusIcon className="shrink-0" />
+              <span className="truncate min-w-0 group-data-[collapsible=icon]:hidden">
+                New chat
+              </span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -175,9 +177,9 @@ function ChatItem({
         isActive={isActive}
         tooltip={conversation.title}
         render={<Link href={`/c/${conversation.id}`} />}
-        className={cn(isActive && "font-medium")}
+        className={cn("w-full justify-start overflow-hidden", isActive && "font-medium")}
       >
-        <span className="truncate">{conversation.title}</span>
+        <span className="truncate min-w-0 flex-1 text-left">{conversation.title}</span>
       </SidebarMenuButton>
 
       <DropdownMenu>
@@ -222,33 +224,54 @@ function ChatItem({
   );
 }
 
-/** Footer menu with theme toggle and Clerk user account button. */
+/** Footer menu with Shadcn theme toggler and Clerk user account button. */
 function SidebarFooterMenu() {
-  const { resolvedTheme, setTheme } = useTheme();
+  const { setTheme } = useTheme();
 
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          className="w-full justify-start"
-          onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-        >
-          Toggle theme
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            render={
+              <SidebarMenuButton
+                tooltip="Toggle theme"
+                className="w-full justify-start gap-2.5"
+              />
+            }
+          >
+            <div className="relative flex size-4 items-center justify-center shrink-0">
+              <Sun className="size-4 scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
+              <Moon className="absolute size-4 scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+            </div>
+            <span className="truncate min-w-0 group-data-[collapsible=icon]:hidden">Theme</span>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent side="right" align="start">
+            <DropdownMenuItem onClick={() => setTheme("light")}>
+              <Sun className="mr-2 size-4" />
+              <span>Light</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("dark")}>
+              <Moon className="mr-2 size-4" />
+              <span>Dark</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("system")}>
+              <Monitor className="mr-2 size-4" />
+              <span>System</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </SidebarMenuItem>
       <SidebarMenuItem>
-        <div className="flex items-center gap-2 px-1 py-1.5">
+        <div className="flex items-center gap-2 px-1.5 py-1.5 min-w-0 overflow-hidden">
           <UserButton
             appearance={{
               elements: {
-                avatarBox: "size-8",
+                avatarBox: "size-8 shrink-0",
               },
             }}
           />
-          <span className="truncate text-sm text-muted-foreground group-data-[collapsible=icon]:hidden">
+          <span className="truncate min-w-0 text-sm text-muted-foreground group-data-[collapsible=icon]:hidden">
             Account
           </span>
         </div>

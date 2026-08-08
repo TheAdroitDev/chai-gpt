@@ -14,6 +14,7 @@ import {
   MessageResponse,
 } from "@/components/ai-elements/message";
 import { Loader } from "@/components/ai-elements/loader";
+import { Marker, MarkerContent, MarkerIcon } from "@/components/ui/marker";
 
 /** Extracts plain text from a `UIMessage` by joining all text parts. */
 function getMessageText(message: UIMessage) {
@@ -36,25 +37,27 @@ export function ChatMessages({ messages, status }: ChatMessagesProps) {
     status === "submitted" && messages.at(-1)?.role === "user";
 
   return (
-    <Conversation>
-      <ConversationContent className="py-8">
-        {messages.map((message) => (
-          <Message key={message.id} from={message.role}>
-            <MessageContent>
-              <MessageResponse>{getMessageText(message)}</MessageResponse>
-            </MessageContent>
-          </Message>
-        ))}
+    <ConversationContent>
+      {messages.map((message) => (
+        <Message key={message.id} from={message.role}>
+          <MessageContent>
+            <MessageResponse>{getMessageText(message)}</MessageResponse>
+          </MessageContent>
+        </Message>
+      ))}
 
-        {isWaiting ? (
-          <Message from="assistant">
-            <MessageContent>
-              <Loader />
-            </MessageContent>
-          </Message>
-        ) : null}
-      </ConversationContent>
-   
-    </Conversation>
+      {isWaiting ? (
+        <Message from="assistant">
+          <MessageContent>
+            <Marker>
+              <MarkerIcon>
+                <Loader />
+              </MarkerIcon>
+              <MarkerContent>Thinking...</MarkerContent>
+            </Marker>
+          </MessageContent>
+        </Message>
+      ) : null}
+    </ConversationContent>
   );
 }

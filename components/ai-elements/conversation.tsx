@@ -12,9 +12,9 @@ export type ConversationProps = ComponentProps<typeof StickToBottom>;
 
 export const Conversation = ({ className, ...props }: ConversationProps) => (
   <StickToBottom
-    className={cn("relative flex-1 overflow-y-hidden", className)}
-    initial="smooth"
-    resize="smooth"
+    className={cn("relative flex-1 min-h-0 w-full overflow-y-auto", className)}
+    initial={false}
+    resize={false}
     role="log"
     {...props}
   />
@@ -29,7 +29,10 @@ export const ConversationContent = ({
   ...props
 }: ConversationContentProps) => (
   <StickToBottom.Content
-    className={cn("flex flex-col gap-8 p-4", className)}
+    className={cn(
+      "mx-auto flex w-full max-w-3xl flex-col gap-5 px-4 pt-5 pb-10 md:px-6 md:pt-6 md:pb-12",
+      className
+    )}
     {...props}
   />
 );
@@ -85,7 +88,7 @@ export const ConversationScrollButton = ({
     !isAtBottom && (
       <Button
         className={cn(
-          "absolute bottom-4 left-[50%] translate-x-[-50%] rounded-full dark:bg-background dark:hover:bg-muted",
+          "absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full border bg-background/90 shadow-md backdrop-blur hover:bg-muted z-20 transition-all",
           className
         )}
         onClick={handleScrollToBottom}
